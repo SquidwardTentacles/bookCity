@@ -10,6 +10,18 @@ let { port } = require('./config')
 
 // })
 
+app.use(async (ctx, next) => {
+  console.log('come');
+
+  ctx.append("Access-Control-Allow-Origin", "*");
+  ctx.append("Access-Control-Allow-Methods", "GET, POST,PUT,DELETE");
+  ctx.append(
+    "Access-Control-Allow-Headers",
+    "X-Requested-With,content-type, Authorization"
+  );
+  next();
+});
+
 app.use(business.routes())
 
 app.listen(port, () => {

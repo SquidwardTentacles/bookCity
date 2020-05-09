@@ -1,44 +1,49 @@
 {
   "pages": [
-    "pages/index/main",
-    "pages/logs/main",
-    "pages/counter/main"
+    "pages/bookshelf/main",
+    "pages/mine/main",
+    "pages/constellation/main",
+    "pages/book-city/main"
   ],
   "window": {
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#fff",
     "navigationBarTitleText": "WeChat",
-    "navigationBarTextStyle": "black"
+    "navigationBarTextStyle": "black",
+    "navigationStyle": "custom"
   },
   "tabBar": {
     "color": "#999",
     "backgroundColor": "#fafafa",
-    "selectedColor": "#333",
+    "selectedColor": "#b3453c",
     "borderStyle": "white",
 
-    "list": [{
-      "text": "首页",
-      "pagePath": "pages/index/main",
-      "iconPath": "static/tabs/home.png",
-      "selectedIconPath": "static/tabs/home-active.png"
-    }, {
-      "text": "订单",
-      "pagePath": "pages/logs/main",
-      "iconPath": "static/tabs/orders.png",
-      "selectedIconPath": "static/tabs/orders-active.png"
-    }],
-
-    "items": [{
-      "name": "首页",
-      "pagePath": "pages/index/main",
-      "icon": "static/tabs/home.png",
-      "activeIcon": "static/tabs/home-active.png"
-    }, {
-      "name": "订单",
-      "pagePath": "pages/logs/main",
-      "icon": "static/tabs/orders.png",
-      "activeIcon": "static/tabs/orders-active.png"
-    }],
+    "list": [
+      {
+        "text": "书架",
+        "pagePath": "pages/bookshelf/main",
+        "iconPath": "static/images/navtab/bookshelf.jpg",
+        "selectedIconPath": "static/images/navtab/bookshelf-active.jpg"
+      },
+      {
+        "text": "书城",
+        "pagePath": "pages/book-city/main",
+        "iconPath": "static/images/navtab/bookcity.jpg",
+        "selectedIconPath": "static/images/navtab/bookcity-active.jpg"
+      },
+      {
+        "text": "订单",
+        "pagePath": "pages/mine/main",
+        "iconPath": "static/images/navtab/mine.jpg",
+        "selectedIconPath": "static/images/navtab/mine-active.jpg"
+      },
+      {
+        "text": "星座",
+        "pagePath": "pages/constellation/main",
+        "iconPath": "static/images/navtab/constellation.jpg",
+        "selectedIconPath": "static/images/navtab/constellation-active.jpg"
+      }
+    ],
     "position": "bottom"
   }
 }

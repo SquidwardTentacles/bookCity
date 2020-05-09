@@ -7,7 +7,7 @@ module.exports = {
     console.log(ctx.query.url);
 
     ctx.body = fs.readFileSync(path.resolve(__dirname, `../static/images/${imgUrl}`))
-    console.log('ddddd');
+    console.log(imgUrl);
 
   }
 }
