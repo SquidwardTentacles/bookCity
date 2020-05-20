@@ -3,16 +3,23 @@ const app = new Koa()
 const session = require('koa-session')
 const business = require('./router/business')
 const backControl = require('./router/manage-back')
-let { port, address } = require('../config.json')
-const bodyParser = require('koa-bodyparser')
+// const bodyParser = require('koa-bodyparser')
+// const formidable = require('koa-formidable')
+const path = require('path')
+const static = require('koa-static')
+let { port, address, staticConfig } = require('./config.json')
 app.keys = ['test']
 app.use(async (ctx, next) => {
-  ctx.append("Access-Control-Allow-Origin", "http://192.168.1.3:8080")
-  ctx.append("Access-Control-Allow-Methods", "GET, POST,PUT,DELETE")
-  ctx.append(
-    "Access-Control-Allow-Headers",
-    "X-Requested-With,content-type, Authorization"
-  )
+  let originUrl = ctx.request.header.origin
+  let url = ''
+  // 判断请求地址 赋值是否允许跨域 三元运算符
+  originUrl === 'http://localhost:8080' ||
+    originUrl === 'http://127.0.0.1:8080' ||
+    originUrl === "http://192.168.1.3:8080" ?
+    url = originUrl : ''
+  ctx.append("Access-Control-Allow-Origin", url)
+  ctx.append('Access-Control-Allow-Headers', 'Content-Type, Content-Length, Authorization, Accept, X-Requested-With , yourHeaderFeild')
+  ctx.append("Access-Control-Allow-Methods", "GET, POST,PUT,DELETE,OPTIONS")
   await next()
 })
 
@@ -28,10 +35,14 @@ app.use(session({
     delete this.destroy[key]
   }
 }, app))
-app.use(bodyParser())
+// app.use(formidable())
+// app.use(bodyParser())
+app.use(static(path.resolve('./file/txt')))
 app.use(business.routes())
-app.use(backControl.routes())
+// console.log(backControl, 'sssss')
+
+app.use(backControl.router.routes())
 
 app.listen(port, address, () => {
-  console.log('running.....' + port)
+  console.log('running.....' + address + ':' + port)
 })

@@ -8,14 +8,14 @@
     <div class="img-box">
 
       <div class="male">
-        <image src="http://192.168.1.3:8000/?url=male.jpg"
+        <image src="http://127.0.0.1:3000/?url=male.jpg"
                alt=""
                srcset=""></image>
         <p>男频小说</p>
         <span>玄幻、都市</span>
       </div>
       <div class="famale">
-        <image src="http://192.168.1.3:8000/?url=famale.jpg"
+        <image src="http://127.0.0.1:3000/?url=famale.jpg"
                alt=""
                srcset=""></image>
         <p>女频小说</p>

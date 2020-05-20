@@ -1,7 +1,7 @@
 import vue from 'vue'
 import axios from 'axios'
 import qs from 'qs'
-import { address, port } from '../config.json'
+import { address, port } from '../server/config.json'
 console.log(address, port)
 
 axios.defaults.baseURL = `http://${address}:${port}`
@@ -23,10 +23,7 @@ axios.interceptors.request.use(function (config) {
 // 添加响应拦截器
 axios.interceptors.response.use(function (res) {
   // 对响应数据做点什么
-  if (!res.data.success) {
-    return Promise.reject(res)
-  }
-  return res.data
+  return Promise.resolve(res.data)
 }, function (error) {
   // 对响应错误做点什么
   return Promise.reject(error)

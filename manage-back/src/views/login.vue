@@ -1,5 +1,7 @@
 <template>
   <div class="login flexbox j-center a-center">
+    <subClickELE @subClick="subclick"
+                 data="indexsub"></subClickELE>
     <el-form :model="ruleForm"
              status-icon
              :rules="rules"
@@ -22,13 +24,17 @@
       <el-form-item>
         <el-button type="primary"
                    @click="submitForm('ruleForm')">登录</el-button>
-        <el-button @click="resetForm('ruleForm')">注册</el-button>
+        <el-button @click="register('ruleForm')">注册</el-button>
       </el-form-item>
     </el-form>
   </div>
 </template>
 <script>
+import subClickELE from '../components/index-comp'
 export default {
+  components: {
+    subClickELE
+  },
   data () {
     var validatePass = (rule, value, callback) => {
       if (value === '') {
@@ -68,10 +74,18 @@ export default {
               password: this.ruleForm.password
             })
             .then(res => {
-              console.log(res)
+              if (res.code === '001') {
+                this.$message.success(res.msg)
+                this.$router.push({
+                  path: '/home/index'
+                })
+              } else {
+                this.$message.error(res.msg)
+              }
             })
             .catch(err => {
-              console.log(err)
+              this.$message.error('请求失败！')
+              console.log(err, 'err')
             })
         } else {
           console.log('error submit!!')
@@ -79,7 +93,10 @@ export default {
         }
       })
     },
-    resetForm (formName) {
+    subclick (data) {
+      console.log(data)
+    },
+    register (formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
           this.axios
