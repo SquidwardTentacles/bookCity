@@ -1,21 +1,23 @@
 const db = require('./DB.js')
 // 声明一个自动从对象中获取插入数据参数的方法
+const { coverImgName } = require('../router/manage-back')
 async function getInsertParams (args, surface, back) {
+  // 保存插入的数据
+  console.log(coverImgName, 'coverImgNamewwwwww')
   let valueArr = Object.values(args)
-  valueArr.push('')
+  // 声明一个逗号字符串 保存相应长度的数据长度的字符串
   let commaStr = ''
+  // 拿到插入数据的键值
   let keyStr = Object.keys(args).toLocaleString()
+  // 根据数据的长度 拼接相应的逗号
   for (let i = 0; i < valueArr.length; i++) {
     commaStr += '?,'
   }
   // 删除最后一个逗号
   let lengths = commaStr.length - 1
   commaStr = commaStr.slice(0, lengths)
-  let sql = `insert into ${surface} values(${commaStr})`
-  // console.log(sql, valueArr)
+  let sql = `insert into ${surface}(${keyStr}) values(${commaStr})`
   let backd = await db.q(sql, valueArr)
-  // console.log(backd)
-
   back(keyStr, commaStr, valueArr)
 }
 module.exports = {
@@ -32,8 +34,18 @@ module.exports = {
     // console.log(args)
 
     getInsertParams(args, 'bookshelf', (...arg) => {
-      // console.log(arg)
+      console.log(arg)
+      let { coverImgName } = require('../router/manage-back')
+      console.log(coverImgName, 'coverImgName')
+      if (coverImgName) {
+        coverImgName.then(success => {
+          console.log(success)
 
+        }).catch(err => {
+          console.log(err)
+
+        })
+      }
     })
 
 

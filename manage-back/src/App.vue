@@ -60,6 +60,9 @@ html,
 .flexbox.a-center {
   align-items: center;
 }
+.flexbox.f-column {
+  flex-direction: column;
+}
 a {
   text-decoration: none;
 }
