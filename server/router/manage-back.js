@@ -2,21 +2,26 @@ const Router = require('koa-router')
 const router = new Router()
 let backControl = require('../control/back-control')
 const path = require('path')
+const fs = require('fs')
 
-let coverImgName = '888888888888888888888888888888888888'
+let coverImgName = ''
 // 参数 * 为必传字段
 
 const multer = require('koa-multer')//加载koa-multer模块  
+let savePath = path.join(__dirname, '../file/cover-img')
 var storage = multer.diskStorage({
   //文件保存路径  
   destination: function (req, file, cb) {
-    cb(null, path.join(__dirname, '../file/txt'))
+    cb(null, savePath)
   },
   //修改文件名称  
   filename: function (req, file, cb) {
     // 原始文件名
     var fileFormat = (file.originalname).split(".")
-
+    // 如果没有文件夹就新建
+    fs.mkdir(savePath, function (err) {
+      if (err) console.log('文件夹新建失败')
+    })
     // 拿到文件名称
     let fileName = Date.now() + "." + fileFormat[fileFormat.length - 1]
     coverImgName = fileName

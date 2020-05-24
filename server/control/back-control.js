@@ -4,9 +4,6 @@ const Koa = require('koa')
 const app = new Koa()
 // 引入获取请求参数的方法
 const getReqDatae = require('../js/getReqData')
-let objb = {
-  coverImgName: 'sssss'
-}
 module.exports = {
   login: async (ctx, next) => {
     let reqData = await getReqDatae(ctx)
@@ -45,12 +42,18 @@ module.exports = {
   txtCoverName: 'txtCoverNameffffff',
   bookAdd: {
     addFunc: async (ctx, next) => {
+      // 拿到书籍的封面图片名称
+      let { coverImgName } = require('../router/manage-back')
       let obj = ctx.req.body
+
+      obj.cover_img_name = coverImgName
       obj.price = parseFloat(obj.price)
       obj.gender_type = parseFloat(obj.gender_type)
       obj.charge = parseFloat(obj.charge)
 
-      let bookSesson = backUserModel.saveBookSesson(obj)
+      let bookSesson = await backUserModel.saveBookSesson(obj)
+      ctx.body = bookSesson
+
     }, txtCoverName: 'txtCoverName'
   }
 }

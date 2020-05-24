@@ -1,9 +1,7 @@
 const db = require('./DB.js')
-// 声明一个自动从对象中获取插入数据参数的方法
-const { coverImgName } = require('../router/manage-back')
+// 声明一个自动从对象中获取插入数据参数的方法 arg数据对象 surface操作的表名 back 插入成功失败的回调函数
 async function getInsertParams (args, surface, back) {
   // 保存插入的数据
-  console.log(coverImgName, 'coverImgNamewwwwww')
   let valueArr = Object.values(args)
   // 声明一个逗号字符串 保存相应长度的数据长度的字符串
   let commaStr = ''
@@ -18,9 +16,10 @@ async function getInsertParams (args, surface, back) {
   commaStr = commaStr.slice(0, lengths)
   let sql = `insert into ${surface}(${keyStr}) values(${commaStr})`
   let backd = await db.q(sql, valueArr)
-  back(keyStr, commaStr, valueArr)
+  back(backd)
 }
 module.exports = {
+  // 查找用户是否存在
   lookupUser: async (args) => {
     let sql = `select * from back_user where account = ?`
     let arr = Object.values(args)
@@ -29,25 +28,24 @@ module.exports = {
     }
     return await db.q(sql, arr)
   },
+  // 注册加入数据库人员注册信息
   insertPeo: async (args) => await db.q(`insert into back_user(account,password) values(?,?)`, Object.values(args)),
+  // 插入书籍
   saveBookSesson: async (args) => {
-    // console.log(args)
-
-    getInsertParams(args, 'bookshelf', (...arg) => {
-      console.log(arg)
-      let { coverImgName } = require('../router/manage-back')
-      console.log(coverImgName, 'coverImgName')
-      if (coverImgName) {
-        coverImgName.then(success => {
-          console.log(success)
-
-        }).catch(err => {
-          console.log(err)
-
-        })
+    let obj = {}
+    await getInsertParams(args, 'bookshelf', (back) => {
+      if (back && back.affectedRows) {
+        obj = {
+          code: '001',
+          msg: '书籍添加成功'
+        }
+      } else {
+        obj = {
+          code: '002',
+          msg: '书籍添加失败！请检查后重试'
+        }
       }
     })
-
-
+    return obj
   }
 }
