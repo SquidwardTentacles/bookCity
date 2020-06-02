@@ -87,7 +87,12 @@ export default {
   methods: {
     uploadForm () {
       // 调用子组件的方法
-      this.$refs.uploadComp.uploadForm(this.formData)
+      // this.$refs.uploadComp.uploadForm(this.formData)
+      this.axios.post('/back/book-add', this.formData).then(res => {
+        console.log(res)
+      }).catch(err => {
+        console.log(err)
+      })
     },
     insertIdC (data) {
       console.log(data)

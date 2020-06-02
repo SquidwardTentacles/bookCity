@@ -12,6 +12,7 @@ module.exports = {
       ctx.body = { code: '001', msg: '登录成功' }
       ctx.session.user = res[0]
     } else {
+      console.log(res, 'res')
       ctx.body = { code: '002', msg: '账户或密码错误' }
     }
   },
@@ -40,14 +41,7 @@ module.exports = {
     }
   },
   addFunc: async (ctx, next) => {
-    // 拿到书籍的封面图片名称
-    // let { fileSesson } = require('../router/manage-back')
     let obj = ctx.req.body
-    // console.log(fileSesson, 'fileSesson')
-    // obj[fileSesson.fileType] = fileSesson
-    // obj.price = parseFloat(obj.price)
-    // obj.gender_type = parseFloat(obj.gender_type)
-    // obj.charge = parseFloat(obj.charge)
     console.log(obj, 'obj')
 
     let bookSesson = await backUserModel.saveBookSesson(obj ? obj : '')

@@ -10,13 +10,18 @@ const static = require('koa-static')
 let { port, address, staticConfig } = require('./config.json')
 app.keys = ['test']
 app.use(async (ctx, next) => {
-  let originUrl = ctx.request.header.origin
+  // 保存来时的请求地址 允许跨域地址的操作
+  let fromUrl = ctx.request.header.origin
+  console.log(ctx.request.header.origin, 'fromUrl')
+  let allowOrigins = [
+    `http://${address}:8080`,
+    'http://127.0.0.1:8080',
+    'http://localhost:8080',
+  ]
   let url = ''
-  // 判断请求地址 赋值是否允许跨域 三元运算符
-  originUrl === 'http://localhost:8080' ||
-    originUrl === 'http://127.0.0.1:8080' ||
-    originUrl === "http://192.168.1.3:8080" ?
-    url = originUrl : ''
+  if (allowOrigins.includes(fromUrl)) {
+    url = fromUrl
+  }
   ctx.append("Access-Control-Allow-Origin", url)
   ctx.append('Access-Control-Allow-Headers', 'Content-Type, Content-Length, Authorization, Accept, X-Requested-With , yourHeaderFeild')
   ctx.append("Access-Control-Allow-Methods", "GET, POST,PUT,DELETE,OPTIONS")

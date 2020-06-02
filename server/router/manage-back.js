@@ -12,7 +12,7 @@ const multer = require('koa-multer')//加载koa-multer模块
 var storage = multer.diskStorage({
   //文件保存路径  
   destination: function (req, file, cb) {
-    // 保存文件类型
+    // 保存文件类型 用文件类型自动创建文件夹 文件类型就是文件夹名称
     fileSesson.fileType = file.mimetype.split('/')[0]
     // 声明一个文件存储的文件夹
     let savePath = path.join(__dirname, '../file/' + fileSesson.fileType)
@@ -29,7 +29,6 @@ var storage = multer.diskStorage({
     // 拿到文件名称
     let fileName = Date.now() + "." + fileFormat[fileFormat.length - 1]
     fileSesson.fileName = fileName
-
     // 导出文件名
     module.exports.fileSesson = fileSesson
     cb(null, fileName)

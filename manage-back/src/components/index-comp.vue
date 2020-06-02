@@ -41,6 +41,7 @@
 </template>
 <script>
 import { fileupload } from '../assets/svgfile/svg.json'
+import { address, port } from '../../../server/config.json'
 export default {
   name: 'subindex',
   props: {
@@ -92,13 +93,17 @@ export default {
     openBox (url) {
       this.dialogImgUrl = url
     },
+    // 上传文件按钮的确认事件
     txtBtn () {
       this.uploadFile(this.$refs[this.fileAdd].files[0], this.uploadUrl)
       this.uploadData = true
     },
-    uploadForm (obj) {
-      this.uploadFile(this.$refs[this.fileAdd].files[0], this.uploadUrl, obj)
-    },
+
+    // uploadForm (obj) {
+    //   console.log(obj)
+
+    //   this.uploadFile(this.$refs[this.fileAdd].files[0], this.uploadUrl, obj)
+    // },
     previewPic (file, backFile) {
       if (file === undefined) {
         this.$message.error('请选择图片')
@@ -127,11 +132,10 @@ export default {
     },
     // file 文件对象 url文件上传的路径 params 附加信息
     uploadFile (file, url, params) {
-      console.log(file)
       // 保存this指向
       const that = this
-      if (!that.uploadFile) {
-        that.$message.error('请选择图片')
+      if (!file) {
+        that.$message.error('请选择文件后上传')
         return
       }
       var formData = new FormData()
@@ -142,7 +146,7 @@ export default {
       formData.append('insertId', setid)
       // }
       const xhr = new XMLHttpRequest()
-      xhr.open('post', 'http://127.0.0.1:3000' + url)
+      xhr.open('post', `http://${address}:${port}` + url)
       xhr.send(formData)
       xhr.onload = function () {
         if (xhr.responseText) {
