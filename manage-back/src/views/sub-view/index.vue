@@ -6,6 +6,16 @@
         <uploadComp title="请选择书籍封面"
                     uploadUrl="/back/book-add"
                     accept="image/*"
+                    v-on:insertIdC="insertIdC"
+                    fileAdd="fileAddImg"
+                    :updateId="updateId"
+                    ref="uploadComp"></uploadComp>
+        <uploadComp title="请选择书籍TXT文件"
+                    v-on:insertIdC="insertIdC"
+                    fileAdd="fileAddTxt"
+                    :updateId="updateId"
+                    uploadUrl="/back/book-add"
+                    accept="text/plain"
                     ref="uploadComp"></uploadComp>
         <el-input placeholder="请输入书籍名称"
                   v-model="formData.title"
@@ -67,14 +77,21 @@ export default {
         { id: 1, label: '男' },
         { id: 2, label: '女' }
       ],
-      dialogImgUrl: ''
+      dialogImgUrl: '',
+      updateId: 0
     }
   },
-
+  mounted () {
+    console.log('load')
+  },
   methods: {
     uploadForm () {
       // 调用子组件的方法
       this.$refs.uploadComp.uploadForm(this.formData)
+    },
+    insertIdC (data) {
+      console.log(data)
+      this.updateId = data
     }
 
   }

@@ -39,21 +39,22 @@ module.exports = {
       }
     }
   },
-  txtCoverName: 'txtCoverNameffffff',
-  bookAdd: {
-    addFunc: async (ctx, next) => {
-      // 拿到书籍的封面图片名称
-      let { coverImgName } = require('../router/manage-back')
-      let obj = ctx.req.body
+  addFunc: async (ctx, next) => {
+    // 拿到书籍的封面图片名称
+    // let { fileSesson } = require('../router/manage-back')
+    let obj = ctx.req.body
+    // console.log(fileSesson, 'fileSesson')
+    // obj[fileSesson.fileType] = fileSesson
+    // obj.price = parseFloat(obj.price)
+    // obj.gender_type = parseFloat(obj.gender_type)
+    // obj.charge = parseFloat(obj.charge)
+    console.log(obj, 'obj')
 
-      obj.cover_img_name = coverImgName
-      obj.price = parseFloat(obj.price)
-      obj.gender_type = parseFloat(obj.gender_type)
-      obj.charge = parseFloat(obj.charge)
+    let bookSesson = await backUserModel.saveBookSesson(obj ? obj : '')
+    ctx.body = bookSesson
 
-      let bookSesson = await backUserModel.saveBookSesson(obj)
-      ctx.body = bookSesson
+  },
+  fileUpload: {
 
-    }, txtCoverName: 'txtCoverName'
   }
 }

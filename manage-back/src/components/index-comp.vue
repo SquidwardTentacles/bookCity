@@ -10,13 +10,19 @@
                @change="uploadFileChange($event)"
                type="file"
                :accept="accept"
-               ref="fileAdd">
+               :ref="fileAdd">
       </div>
       <img class="preview-img"
            v-if="coverImgBase"
-           :src="coverImgBase"
+           :src="imgurl.txtUrl"
            @click="openBox(imgurl.txtUrl)"
            alt="">
+      <div v-if="fileSesson.name"
+           class="file-sesson-box">
+        <p><span>文件名称：</span>{{fileSesson.name}}</p>
+        <p><span>文件大小：</span>{{fileSesson.size+'kb'}}</p>
+        <p><span>文件类型：</span>{{fileSesson.type}}</p>
+      </div>
       <el-button type="primary"
                  @click="txtBtn"
                  class="submit-btn"
@@ -43,7 +49,9 @@ export default {
     // 设置文件类型
     accept: String,
     // 文件上传的地址
-    uploadUrl: String
+    uploadUrl: String,
+    fileAdd: String,
+    updateId: Number
   },
   data () {
     return {
@@ -54,7 +62,10 @@ export default {
         txtUrl: ''
       },
       dialogImgUrl: '',
-      uploadData: false
+      uploadData: false,
+      fileSesson: {},
+      // 通过id值来判断是重新上传书籍文件还是更新本书书籍文件 如果id值为false或者0 则重新上传 否则更新 第一次上传文件之后id值赋值为后台返回的id
+      insertId: ''
     }
   },
   mounted () {
@@ -62,13 +73,14 @@ export default {
   },
   computed: {
     coverImgBase () {
-      return this.imgurl.txtUrl
+      return this.imgurl.txtUrl && this.accept.indexOf('image') !== -1
     },
     // 放大图片的显示与否
     dialogShow () {
       return this.dialogImgUrl !== ''
     }
   },
+
   methods: {
     // 放大图片的点击事件
     dialogImgClick () {
@@ -81,10 +93,11 @@ export default {
       this.dialogImgUrl = url
     },
     txtBtn () {
+      this.uploadFile(this.$refs[this.fileAdd].files[0], this.uploadUrl)
       this.uploadData = true
     },
     uploadForm (obj) {
-      this.uploadFile(this.$refs.fileAdd.files[0], this.uploadUrl, obj)
+      this.uploadFile(this.$refs[this.fileAdd].files[0], this.uploadUrl, obj)
     },
     previewPic (file, backFile) {
       if (file === undefined) {
@@ -102,28 +115,44 @@ export default {
     },
     // 文本文件change
     uploadFileChange (e) {
-      const file = this.$refs.fileAdd.files[0]
+      const file = this.$refs[this.fileAdd].files[0]
+      console.log(file)
+
+      if (file && this.accept.indexOf('image') === -1) {
+        this.fileSesson = file
+      }
       this.previewPic(file, fileBack => {
         this.imgurl.txtUrl = fileBack
       })
     },
     // file 文件对象 url文件上传的路径 params 附加信息
     uploadFile (file, url, params) {
-      if (!this.uploadFile) {
-        this.$message.error('请选择图片')
+      console.log(file)
+      // 保存this指向
+      const that = this
+      if (!that.uploadFile) {
+        that.$message.error('请选择图片')
         return
       }
       var formData = new FormData()
       formData.append('file', file)
-      for (const i in params) {
-        formData.append(i, params[i])
-        console.log(i)
-      }
+      // if (that.insertId) {
+      console.log(that.insertId)
+      const setid = this.updateId ? this.updateId : this.insertId
+      formData.append('insertId', setid)
+      // }
       const xhr = new XMLHttpRequest()
       xhr.open('post', 'http://127.0.0.1:3000' + url)
       xhr.send(formData)
       xhr.onload = function () {
-        console.log(xhr.responseText)
+        if (xhr.responseText) {
+          const backData = JSON.parse(xhr.responseText)
+          that.insertId = backData.insertId
+          console.log(that.insertId)
+          console.log(backData.insertId)
+
+          that.$emit('insertIdC', backData.insertId)
+        }
       }
     }
   }
@@ -133,7 +162,9 @@ export default {
 .upload-comp {
   .file-outerbox {
     min-height: 150px;
-
+    label {
+      width: 155px;
+    }
     .txt-file-upload {
       margin: 0 20px;
       position: relative;
@@ -153,6 +184,14 @@ export default {
     .preview-img {
       width: 150px;
       height: 130px;
+      cursor: pointer;
+    }
+    .file-sesson-box {
+      span {
+        text-align: right;
+        width: 80px;
+        display: inline-block;
+      }
     }
     .el-input {
       margin-bottom: 10px;
@@ -185,6 +224,7 @@ export default {
       width: 100%;
       height: 100%;
       padding: 0;
+      cursor: pointer;
       .img-dia-box {
         width: 100%;
         height: 100%;

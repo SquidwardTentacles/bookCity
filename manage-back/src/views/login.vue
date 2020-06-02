@@ -1,7 +1,7 @@
 <template>
   <div class="login flexbox j-center a-center">
-    <subClickELE @subClick="subclick"
-                 data="indexsub"></subClickELE>
+    <input type="text"
+           v-focus>
     <el-form :model="ruleForm"
              status-icon
              :rules="rules"
@@ -30,11 +30,7 @@
   </div>
 </template>
 <script>
-import subClickELE from '../components/index-comp'
 export default {
-  components: {
-    subClickELE
-  },
   data () {
     var validatePass = (rule, value, callback) => {
       if (value === '') {
@@ -61,6 +57,13 @@ export default {
       rules: {
         account: [{ validator: validatePass, trigger: 'blur' }],
         password: [{ validator: validatePass2, trigger: 'blur' }]
+      }
+    }
+  },
+  directives: {
+    focus: {
+      inserted: function (el) {
+        el.focus()
       }
     }
   },
@@ -121,6 +124,10 @@ export default {
 </script>
 <style lang="less">
 .login {
+  input {
+    border: none;
+    border: 1px solid #000;
+  }
   width: 100%;
   height: 100%;
   .demo-ruleForm {

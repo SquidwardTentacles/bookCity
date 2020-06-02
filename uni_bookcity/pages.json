@@ -1,0 +1,57 @@
+{
+	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		{
+			"path": "pages/bookShelf/index",
+			"style": {
+				"navigationBarTitleText": "uni-app"
+			}
+		},
+		{
+			"path": "pages/book_city/index"
+			
+		},
+		{
+			"path": "pages/constellation/index"
+			
+		},
+		{
+			"path": "pages/mine/index"
+		}
+	],
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "uni-app",
+		"navigationBarBackgroundColor": "#F8F8F8",
+		"backgroundColor": "#F8F8F8"
+	},
+	"tabBar":{
+		"selectedColor":"#b9453c",
+		"color":"#bfbfbf",
+		"list":[
+			{
+				"pagePath":"pages/bookShelf/index",
+				"iconPath":"static/images/navtab/bookshelf.jpg",
+				"selectedIconPath":"static/images/navtab/bookshelf-active.jpg",
+				"text":"书架"
+			},
+			{
+				"pagePath":"pages/book_city/index",
+				"iconPath":"static/images/navtab/bookcity.jpg",
+				"selectedIconPath":"static/images/navtab/bookcity-active.jpg",
+				"text":"书城"
+			},
+			{
+				"pagePath":"pages/constellation/index",
+				"iconPath":"static/images/navtab/constellation.jpg",
+				"selectedIconPath":"static/images/navtab/constellation-active.jpg",
+				"text":"星座"
+			},
+			{
+				"pagePath":"pages/mine/index",
+				"iconPath":"static/images/navtab/mine.jpg",
+				"selectedIconPath":"static/images/navtab/mine-active.jpg",
+				"text":"我的"
+			}
+		]
+	}
+}
