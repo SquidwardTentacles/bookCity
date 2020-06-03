@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50547
 File Encoding         : 65001
 
-Date: 2020-06-02 17:46:08
+Date: 2020-06-03 17:44:04
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -41,3 +41,14 @@ CREATE TABLE `bookshelf` (
   `describe_txt` text COLLATE utf8_bin COMMENT '描述信息',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=112 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- ----------------------------
+-- Table structure for classification_list
+-- ----------------------------
+DROP TABLE IF EXISTS `classification_list`;
+CREATE TABLE `classification_list` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `classification` varchar(255) COLLATE utf8_bin NOT NULL,
+  `gender_type` varchar(255) COLLATE utf8_bin DEFAULT NULL COMMENT '1 男 2 女 没有则不限定',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=28 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;

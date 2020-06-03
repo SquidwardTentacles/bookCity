@@ -12,7 +12,6 @@ app.keys = ['test']
 app.use(async (ctx, next) => {
   // 保存来时的请求地址 允许跨域地址的操作
   let fromUrl = ctx.request.header.origin
-  console.log(ctx.request.header.origin, 'fromUrl')
   let allowOrigins = [
     `http://${address}:8080`,
     'http://127.0.0.1:8080',

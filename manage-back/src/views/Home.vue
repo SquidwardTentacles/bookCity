@@ -5,51 +5,20 @@
            class="menu-aside">
         <el-aside width="200px"
                   class="aside-menu">
-          <el-menu :default-openeds="['1', '3']">
-            <el-submenu index="1">
-              <template slot="title"><i class="el-icon-message"></i>导航一</template>
-              <el-menu-item-group>
-                <template slot="title">分组一</template>
-                <el-menu-item index="1-1">选项1</el-menu-item>
-                <el-menu-item index="1-2">选项2</el-menu-item>
+          <el-menu>
+            <!-- 通过条件判断是否添加点击事件 -->
+            <el-submenu v-for="(item, index) in getRouteArr"
+                        :key="index"
+                        @click.native="!item.subMenu&&routerClick(item.path)"
+                        :index="returnIndex(index)">
+              <template slot="title"><i class="el-icon-message"></i>{{item.name}}</template>
+              <el-menu-item-group v-if="item.subMenu">
+                <template slot="title">选择书籍分类</template>
+                <el-menu-item :index="index+'-'+indexS"
+                              v-for="(itemS, indexS) in item.subMenu"
+                              @click="routerClick(item.path,indexS+1)"
+                              :key="indexS">{{itemS.title}}</el-menu-item>
               </el-menu-item-group>
-              <el-menu-item-group title="分组2">
-                <el-menu-item index="1-3">选项3</el-menu-item>
-              </el-menu-item-group>
-              <el-submenu index="1-4">
-                <template slot="title">选项4</template>
-                <el-menu-item index="1-4-1">选项4-1</el-menu-item>
-              </el-submenu>
-            </el-submenu>
-            <el-submenu index="2">
-              <template slot="title"><i class="el-icon-menu"></i>导航二</template>
-              <el-menu-item-group>
-                <template slot="title">分组一</template>
-                <el-menu-item index="2-1">选项1</el-menu-item>
-                <el-menu-item index="2-2">选项2</el-menu-item>
-              </el-menu-item-group>
-              <el-menu-item-group title="分组2">
-                <el-menu-item index="2-3">选项3</el-menu-item>
-              </el-menu-item-group>
-              <el-submenu index="2-4">
-                <template slot="title">选项4</template>
-                <el-menu-item index="2-4-1">选项4-1</el-menu-item>
-              </el-submenu>
-            </el-submenu>
-            <el-submenu index="3">
-              <template slot="title"><i class="el-icon-setting"></i>导航三</template>
-              <el-menu-item-group>
-                <template slot="title">分组一</template>
-                <el-menu-item index="3-1">选项1</el-menu-item>
-                <el-menu-item index="3-2">选项2</el-menu-item>
-              </el-menu-item-group>
-              <el-menu-item-group title="分组2">
-                <el-menu-item index="3-3">选项3</el-menu-item>
-              </el-menu-item-group>
-              <el-submenu index="3-4">
-                <template slot="title">选项4</template>
-                <el-menu-item index="3-4-1">选项4-1</el-menu-item>
-              </el-submenu>
             </el-submenu>
           </el-menu>
         </el-aside>
@@ -59,6 +28,7 @@
         <el-main>
           <div class="show-menu-box"
                @click="showTap($event)">显示</div>
+          <!-- 路由出口 -->
           <router-view></router-view>
         </el-main>
       </el-container>
@@ -66,17 +36,54 @@
   </div>
 </template>
 <script>
+import { mapState, mapMutations } from 'vuex'
+
 export default {
   data () {
     return {
       letfMenu: true
     }
   },
+  computed: {
+    getRouteArr () {
+      return this.$router.options.routes[0].children
+    },
+    // 列表中的index为字符串
+    returnIndex () {
+      return (i) => {
+        return i + ''
+      }
+    },
+    // 使用mapState辅助函数简化操作
+    ...mapState([
+      'classificationType' // 将this.classificationType映射为this.$store.state.classificationType
+    ])
+
+  },
+
+  mounted () {
+  },
   methods: {
+    ...mapMutations([
+      'changeActionType'
+    ]),
     showTap (e) {
       const menu = this.$refs.menuAside
       menu.classList.add('menu-aside-c')
-      console.log(menu)
+    },
+    routerClick (path, i) {
+      // 如果是当前页就不跳转
+      const currentPath = this.$router.history.current.path
+
+      if (typeof i === 'number') {
+        // 改变vuex中的值
+        this.changeActionType(i)
+      }
+      if (path && path !== currentPath) {
+        this.$router.push({
+          path
+        })
+      }
     }
   }
 }

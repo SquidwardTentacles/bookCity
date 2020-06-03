@@ -59,6 +59,18 @@ router.post('/back/login', backControl.login)
       }
       */
   .post('/back/book-add', upload.single('file'), backControl.addFunc)
+  .post('/back/book-addparams', backControl.addBookParams)
+  /**
+   * 书籍分类列表的新增
+   * gender_type:1/2/3,
+   * classification:书籍分类信息
+  */
+  .post('/back/book-classification-set', backControl.ClassificationSet)
+  /**
+   * 获取书籍分类列表
+   * gender_type:1/2/3
+  */
+  .get('/back/book-classification-get', backControl.ClassioficationGet)
 // .post('/back/file-upload', backControl.fileUpload)
 
 module.exports.router = router

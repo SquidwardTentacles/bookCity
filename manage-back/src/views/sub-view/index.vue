@@ -51,7 +51,6 @@
                      :value="item.id">
           </el-option>
         </el-select>
-
       </div>
     </div>
     <button @click="uploadForm">提交</button>
@@ -88,17 +87,19 @@ export default {
     uploadForm () {
       // 调用子组件的方法
       // this.$refs.uploadComp.uploadForm(this.formData)
-      this.axios.post('/back/book-add', this.formData).then(res => {
-        console.log(res)
-      }).catch(err => {
-        console.log(err)
-      })
+      this.axios
+        .post('/back/book-addparams', this.formData)
+        .then(res => {
+          console.log(res)
+        })
+        .catch(err => {
+          console.log(err)
+        })
     },
     insertIdC (data) {
       console.log(data)
       this.updateId = data
     }
-
   }
 }
 </script>

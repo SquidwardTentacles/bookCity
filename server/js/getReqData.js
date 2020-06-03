@@ -5,8 +5,6 @@ module.exports = function getReqDatae (ctx) {
       datab += data
     })
     ctx.req.on('end', () => {
-      console.log(datab, 'f')
-
       let arr = datab.split('&')
       let obj = {}
       for (let i = 0; i < arr.length; i++) {

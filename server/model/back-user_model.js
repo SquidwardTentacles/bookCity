@@ -65,5 +65,9 @@ module.exports = {
       }
     })
     return obj
-  }
+  },
+  // 书籍分类的新增
+  setClassification: async (args) => await db.q(`insert into classification_list(${Object.keys(args)}) values(?,?)`, Object.values(args)),
+  // 根据书籍的分类返回对应的详细分类
+  selectClassioficationByType: async (type) => await db.q(`select * from classification_list where gender_type = ?`, [type])
 }

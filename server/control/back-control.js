@@ -40,15 +40,53 @@ module.exports = {
       }
     }
   },
+  // 添加书籍相关文件
   addFunc: async (ctx, next) => {
     let obj = ctx.req.body
-    console.log(obj, 'obj')
-
     let bookSesson = await backUserModel.saveBookSesson(obj ? obj : '')
     ctx.body = bookSesson
-
   },
-  fileUpload: {
-
+  addBookParams: async (ctx, next) => {
+    let reqData = await getReqDatae(ctx)
+    console.log(reqData)
+  },
+  // 获取书籍的分类信息 参数 type 1 男频 2 女频 3不限 classification 分类信息
+  ClassificationSet: async (ctx, next) => {
+    let reqData = await getReqDatae(ctx)
+    let backSes = await backUserModel.setClassification(reqData)
+    if (backSes.affectedRows === 1) {
+      ctx.body = {
+        msg: '新增成功',
+        code: '001'
+      }
+    } else {
+      ctx.body = {
+        msg: '新增失败',
+        code: '002'
+      }
+    }
+  },
+  // 返回书籍的分类信息
+  ClassioficationGet: async (ctx, next) => {
+    let gender_type = ctx.query.gender_type
+    if (!gender_type) {
+      ctx.body = {
+        msg: '请选择搜索条件',
+        code: '002'
+      }
+      return
+    }
+    let backSes = await backUserModel.selectClassioficationByType(gender_type)
+    if (backSes.length) {
+      ctx.body = {
+        data: backSes,
+        code: '001'
+      }
+    } else {
+      ctx.body = {
+        msg: '服务器异常！',
+        code: '002'
+      }
+    }
   }
 }
