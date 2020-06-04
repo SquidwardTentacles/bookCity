@@ -71,6 +71,13 @@ router.post('/back/login', backControl.login)
    * gender_type:1/2/3
   */
   .get('/back/book-classification-get', backControl.ClassioficationGet)
+  /**
+   * 更改书籍分类信息 
+   * updateMsg:更新后的内容，
+   * id:id
+  */
+  .put('/back/book-classificationupdate', backControl.classificationupdate)
+  .delete('/back/book-delclassification', backControl.delClassification)
 // .post('/back/file-upload', backControl.fileUpload)
 
 module.exports.router = router

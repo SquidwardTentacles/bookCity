@@ -69,5 +69,9 @@ module.exports = {
   // 书籍分类的新增
   setClassification: async (args) => await db.q(`insert into classification_list(${Object.keys(args)}) values(?,?)`, Object.values(args)),
   // 根据书籍的分类返回对应的详细分类
-  selectClassioficationByType: async (type) => await db.q(`select * from classification_list where gender_type = ?`, [type])
+  selectClassioficationByType: async (type) => await db.q(`select * from classification_list where gender_type = ?`, [type]),
+  // 更新书籍分类信息
+  updateClassification: async (args) => await db.q(`update classification_list set classification='${args.classification}' where id = ${args.id}`, []),
+  // 删除书籍分类
+  delClassification: async (id) => db.q(`delete from classification_list where id=${id}`)
 }

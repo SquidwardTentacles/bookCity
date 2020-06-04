@@ -21,6 +21,8 @@ app.use(async (ctx, next) => {
   if (allowOrigins.includes(fromUrl)) {
     url = fromUrl
   }
+  console.log(url, 'url')
+
   ctx.append("Access-Control-Allow-Origin", url)
   ctx.append('Access-Control-Allow-Headers', 'Content-Type, Content-Length, Authorization, Accept, X-Requested-With , yourHeaderFeild')
   ctx.append("Access-Control-Allow-Methods", "GET, POST,PUT,DELETE,OPTIONS")

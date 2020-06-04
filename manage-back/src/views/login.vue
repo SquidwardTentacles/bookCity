@@ -1,7 +1,5 @@
 <template>
   <div class="login flexbox j-center a-center">
-    <input type="text"
-           v-focus>
     <el-form :model="ruleForm"
              status-icon
              :rules="rules"
@@ -60,19 +58,12 @@ export default {
       }
     }
   },
-  directives: {
-    focus: {
-      inserted: function (el) {
-        el.focus()
-      }
-    }
-  },
   methods: {
     submitForm (formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
           this.axios
-            .post('/back/login', {
+            .post('/api/login', {
               account: this.ruleForm.account,
               password: this.ruleForm.password
             })

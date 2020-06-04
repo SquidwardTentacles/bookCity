@@ -88,5 +88,44 @@ module.exports = {
         code: '002'
       }
     }
+  },
+  // 更新书籍分类信息
+  classificationupdate: async (ctx, next) => {
+    let reqData = await getReqDatae(ctx)
+    let backMes = await backUserModel.updateClassification(reqData)
+    if (backMes.affectedRows === 1) {
+      ctx.body = {
+        msg: '更新成功',
+        code: '001'
+      }
+    } else {
+      ctx.body = {
+        msg: '修改失败！请稍后重试',
+        code: '002'
+      }
+    }
+  },
+  delClassification: async (ctx, next) => {
+    let reqData = await getReqDatae(ctx)
+    if (reqData.id) {
+      let backMsg = await backUserModel.delClassification(reqData.id)
+      if (backMsg.affectedRows === 1) {
+        ctx.body = {
+          msg: '分类删除成功',
+          code: '001'
+        }
+      } else {
+        ctx.code = {
+          msg: '删除失败！请稍后重试！',
+          code: '002'
+        }
+      }
+    } else {
+      ctx.body = {
+        msg: '参数异常',
+        code: '002'
+      }
+    }
+
   }
 }

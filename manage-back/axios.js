@@ -4,7 +4,7 @@ import qs from 'qs'
 import { address, port } from '../server/config.json'
 console.log(address, port)
 
-axios.defaults.baseURL = `http://${address}:${port}`
+// axios.defaults.baseURL = `http://${address}:${port}`
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'
 
 // 添加请求拦截器
