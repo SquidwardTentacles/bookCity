@@ -98,12 +98,6 @@ export default {
       this.uploadFile(this.$refs[this.fileAdd].files[0], this.uploadUrl)
       this.uploadData = true
     },
-
-    // uploadForm (obj) {
-    //   console.log(obj)
-
-    //   this.uploadFile(this.$refs[this.fileAdd].files[0], this.uploadUrl, obj)
-    // },
     previewPic (file, backFile) {
       if (file === undefined) {
         this.$message.error('请选择图片')
@@ -152,9 +146,7 @@ export default {
         if (xhr.responseText) {
           const backData = JSON.parse(xhr.responseText)
           that.insertId = backData.insertId
-          console.log(that.insertId)
-          console.log(backData.insertId)
-
+          // 将insertid传给父页面
           that.$emit('insertIdC', backData.insertId)
         }
       }

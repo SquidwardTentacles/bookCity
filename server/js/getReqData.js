@@ -1,7 +1,9 @@
 function getRequestData (ctx) {
   return new Promise((resolve, reject) => {
-    let datab
+    let datab = ''
     ctx.req.on('data', data => {
+      console.log(data.toString(), 'd')
+
       datab += data
     })
     ctx.req.on('end', () => {

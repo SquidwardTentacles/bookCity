@@ -43,12 +43,13 @@ module.exports = {
   // 添加书籍相关文件
   addFunc: async (ctx, next) => {
     let obj = ctx.req.body
-    let bookSesson = await backUserModel.saveBookSesson(obj ? obj : '')
+    let bookSesson = await backUserModel.saveBookSesson(obj ? obj : '', 'file')
     ctx.body = bookSesson
   },
   addBookParams: async (ctx, next) => {
     let reqData = await getReqDatae(ctx)
-    console.log(reqData)
+    let bookSesson = await backUserModel.saveBookSesson(reqData, 'unfile')
+    console.log(bookSesson)
   },
   // 获取书籍的分类信息 参数 type 1 男频 2 女频 3不限 classification 分类信息
   ClassificationSet: async (ctx, next) => {
@@ -105,6 +106,7 @@ module.exports = {
       }
     }
   },
+  // 删除分类信息
   delClassification: async (ctx, next) => {
     let reqData = await getReqDatae(ctx)
     if (reqData.id) {
