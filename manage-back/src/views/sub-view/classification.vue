@@ -6,7 +6,7 @@
                 placeholder="请输入书籍分类"></el-input>
       <el-select v-model="value"
                  class="select-box"
-                 placeholder="请选择">
+                 placeholder="请选择阅读人群">
         <el-option v-for="item in options"
                    :key="item.value"
                    :label="item.label"
@@ -16,32 +16,37 @@
       <el-button @click.native="setIfication">确定</el-button>
     </div>
 
-    <div class="classification-box flexbox j-start">
-      <div class="list"
-           v-for="(item, index) in backData"
-           :key="index">
-        <div class="inner flexbox j-between ">
-          <div class="title">
-            <div class="content">
-              <span v-if="editShow!==index">{{item.classification}}</span>
-              <input type="text"
-                     v-else
-                     v-model="classificationEdit">
-            </div>
-          </div>
-          <div class="edit">
-            <el-button size="mini"
-                       v-if="editShow!==index"
-                       @click.native="updateClass(item.classification,index)">编辑</el-button>
-            <el-button size="mini"
+    <div class="classification-box">
+      <div class="class-box flexbox j-start"
+           v-if="backData.length">
+        <div class="list"
+             v-for="(item, index) in backData"
+             :key="index">
+          <div class="inner flexbox j-between ">
+            <div class="title">
+              <div class="content">
+                <span v-if="editShow!==index">{{item.classification}}</span>
+                <input type="text"
                        v-else
-                       @click.native="updateEdit(item.id)">保存</el-button>
-            <el-button size="mini"
-                       @click="delClassification(item)"
-                       type="danger">删除</el-button>
+                       v-model="classificationEdit">
+              </div>
+            </div>
+            <div class="edit">
+              <el-button size="mini"
+                         v-if="editShow!==index"
+                         @click.native="updateClass(item.classification,index)">编辑</el-button>
+              <el-button size="mini"
+                         v-else
+                         @click.native="updateEdit(item.id)">保存</el-button>
+              <el-button size="mini"
+                         @click="delClassification(item)"
+                         type="danger">删除</el-button>
+            </div>
           </div>
         </div>
       </div>
+      <div v-else
+           class="error-box flexbox j-center a-center">当前选项分类信息为空</div>
     </div>
   </div>
 </template>
@@ -53,6 +58,7 @@ export default {
   },
   watch: {
     classificationType () {
+      this.value = this.classificationType
       this.getData()
     }
   },
@@ -83,8 +89,9 @@ export default {
       'changeActionType'
     ]),
     getData (type) {
-      this.axios.get(`/api/book-classification-get?gender_type=${this.classificationType}`).then(res => {
+      this.axios.get(`/api/book-classification-get?gender_type=${this.value}`).then(res => {
         if (res.code === '001') {
+          this.backData = []
           this.backData = res.data
           // 根据参数判断是否显示编辑按钮 解决数据更新后旧数据复现问题
           if (type) this.editShow = ''
@@ -107,6 +114,8 @@ export default {
         this.bookClassification = ''
         this.changeActionType(this.value)
         this.$message.success('分类添加成功')
+        this.backData = []
+        this.backData = res.data
       }).catch(err => {
         console.log(err)
       })
@@ -168,12 +177,21 @@ export default {
 </script>
 <style lang="less" scope>
 .classification {
+  width: 100%;
+  height: 100%;
   .select-box {
     margin: 0 5px;
   }
   .classification-box {
     flex-wrap: wrap;
     margin-top: 5px;
+    .class-box {
+      flex-wrap: wrap;
+    }
+    .error-box {
+      height: calc(100vh - 80px);
+      width: 100%;
+    }
     .list {
       padding: 5px 6px 3px 5px;
       box-sizing: border-box;

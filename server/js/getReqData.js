@@ -2,7 +2,7 @@ function getRequestData (ctx) {
   return new Promise((resolve, reject) => {
     let datab = ''
     ctx.req.on('data', data => {
-      console.log(data.toString(), 'd')
+      console.log(data.toString('utf8'), 'd')
 
       datab += data
     })
@@ -11,6 +11,7 @@ function getRequestData (ctx) {
       let obj = {}
       if (reqMethods === 'POST') {
         let arr = datab.split('&')
+
         for (let i = 0; i < arr.length; i++) {
           let value = arr[i].split('=')
           obj[value[0]] = value[1]
@@ -18,6 +19,8 @@ function getRequestData (ctx) {
       } else if (reqMethods === 'PUT') {
         obj = JSON.parse(datab)
       }
+      console.log(obj, 'obj')
+
       resolve(obj)
 
     })

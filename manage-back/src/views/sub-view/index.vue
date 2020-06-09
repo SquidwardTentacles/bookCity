@@ -1,74 +1,78 @@
 <template>
   <div class="txt-add">
-    <div class="input-box flexbox j-start a-start">
-      <div class="input-box-left">
-        <!-- 文件上传组件封装 书籍封面图片上传-->
-        <uploadComp title="请选择书籍封面"
-                    uploadUrl="/back/book-add"
-                    accept="image/*"
-                    v-on:insertIdC="insertIdC"
-                    fileAdd="fileAddImg"
-                    :updateId="updateId"
-                    ref="uploadComp"></uploadComp>
-        <uploadComp title="请选择书籍TXT文件"
-                    v-on:insertIdC="insertIdC"
-                    fileAdd="fileAddTxt"
-                    :updateId="updateId"
-                    uploadUrl="/back/book-add"
-                    accept="text/plain"
-                    ref="uploadComp"></uploadComp>
-        <el-input placeholder="请输入书籍名称"
-                  v-model="formData.title"
-                  clearable>
-        </el-input>
+    <div class="input-b-box">
+      <!-- 文件上传组件封装 书籍封面图片上传-->
+      <uploadComp title="请选择书籍封面"
+                  uploadUrl="/back/book-add"
+                  accept="image/*"
+                  v-on:insertIdC="insertIdC"
+                  fileAdd="fileAddImg"
+                  :updateId="updateId"
+                  ref="uploadComp"></uploadComp>
+      <uploadComp title="请选择书籍TXT文件"
+                  v-on:insertIdC="insertIdC"
+                  fileAdd="fileAddTxt"
+                  :updateId="updateId"
+                  @fileName="fileName"
+                  uploadUrl="/back/book-add"
+                  accept="text/plain"
+                  ref="uploadComp"></uploadComp>
 
-        <!-- txt_file<el-input placeholder="请输入内容txt_file"
-                  v-model="formData.txt_file"
-                  clearable>
-        </el-input> -->
-
-        classification<el-input placeholder="请输入内容charge"
-                  v-model="formData.classification"
-                  clearable>
-        </el-input>
-
-        price<el-input placeholder="请输入书籍价格price"
-                  v-model="formData.price"
-                  clearable>
-        </el-input>
-
-        describe_txt<el-input placeholder="请输入优惠描述describe"
-                  v-model="formData.describe_txt"
-                  clearable>
-        </el-input>
+      <div class="input-box flexbox between">
+        <p>请输入书籍名称：</p>
+        <div>
+          <el-input placeholder="请输入书籍名称"
+                    v-model="formData.title"
+                    clearable>
+          </el-input>
+        </div>
       </div>
-      <div class="select-box-right">
-        <div class="select-box">
-          <span>请选择书籍分类：</span>
-          <el-select v-model="formData.gender_type"
-                     @change="genderSelect"
-                     placeholder="请选择图书适合阅读的人群">
-            <el-option v-for="item in options"
-                       :key="item.id"
-                       :label="item.label"
-                       :value="item.id">
-            </el-option>
-          </el-select>
+      <div class="input-box flexbox between">
+        <p>请输入书籍价格：</p>
+        <div>
+          <el-input placeholder="请输入书籍价格price"
+                    v-model="formData.price"
+                    clearable>
+          </el-input>
         </div>
-        <div class="select-box">
-          <span>请选择书籍详细分类：</span>
-          <el-select v-model="formData.classification"
-                     placeholder="请选择书籍详细分类">
-            <el-option v-for="item in classificationArr"
-                       :key="item.id"
-                       :label="item.classification"
-                       :value="item.id">
-            </el-option>
-          </el-select>
+      </div>
+
+      <div class="input-box  flexbox between">
+        <p>请选择书籍分类：</p>
+        <el-select v-model="formData.gender_type"
+                   @change="genderSelect"
+                   placeholder="请选择图书适合阅读的人群">
+          <el-option v-for="item in options"
+                     :key="item.id"
+                     :label="item.label"
+                     :value="item.id">
+          </el-option>
+        </el-select>
+      </div>
+      <div class="input-box  flexbox between">
+        <p>请选择书籍详细分类：</p>
+        <el-select v-model="formData.classification"
+                   placeholder="请选择书籍详细分类">
+          <el-option v-for="item in classificationArr"
+                     :key="item.id"
+                     :label="item.classification"
+                     :value="item.id">
+          </el-option>
+        </el-select>
+      </div>
+      <div class="input-box textarea">
+        <p>请输入书籍的描述信息：</p>
+        <div>
+          <el-input placeholder="请输入书籍描述信息"
+                    type="textarea"
+                    v-model="formData.describe_txt"
+                    clearable>
+          </el-input>
         </div>
+        <el-button @click="uploadForm"
+                   type="primary">提交</el-button>
       </div>
     </div>
-    <button @click="uploadForm">提交</button>
   </div>
 </template>
 <script>
@@ -100,16 +104,32 @@ export default {
     console.log('load')
   },
   methods: {
+    // 子组件书本文件上传之后赋值文件名
+    fileName (e) {
+      const strArr = e.split('.')
+      let str = ''
+      for (let i = 0; i < strArr.length - 1; i++) {
+        str += strArr[i]
+      }
+      this.formData.title = str
+    },
     uploadForm () {
-      // 调用子组件的方法
-      // this.$refs.uploadComp.uploadForm(this.formData)
+      const obj = this.formData
+      for (const k in obj) {
+        if (obj[k] === '') {
+          this.$message.error('信息填写不完整')
+          return
+        }
+      }
       // 如果有updateId就将值传给后台 表示更新插入数据 否则是写入数据
       if (this.updateId) this.formData.insertId = this.updateId
-      console.log(this.formData)
       this.axios
         .post('/api/book-addparams', this.formData)
         .then(res => {
-          console.log(res)
+          if (res.code === '001') {
+            this.$message.success('书籍信息添加完成！')
+            this.updateId = res.data.insertId
+          }
         })
         .catch(err => {
           console.log(err)
@@ -135,18 +155,32 @@ export default {
 </script>
 <style lang="less" scoped>
 .txt-add {
-  .input-box-left {
+  .input-b-box {
     max-width: 70%;
     margin-right: 10px;
-  }
-  .select-box-right {
-    .select-box {
-      margin-bottom: 10px;
-      span {
+    .input-box {
+      margin-top: 10px;
+      p {
+        min-width: 175px;
         display: inline-block;
-        width: 150px;
-        font-size: 15px;
       }
+      & > div {
+        flex: 1;
+      }
+    }
+  }
+  .textarea {
+    margin-top: 20px;
+    & > div {
+      margin: 5px 0 10px 0;
+    }
+  }
+  .select-box {
+    margin-bottom: 10px;
+    span {
+      display: inline-block;
+      width: 150px;
+      font-size: 15px;
     }
   }
 }

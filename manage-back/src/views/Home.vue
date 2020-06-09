@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="home">
     <el-container class="el-conteiner">
       <div ref="menuAside"
            class="menu-aside">
@@ -109,7 +109,9 @@ div.menu-aside-c {
     }
   }
 }
-
+.home {
+  height: 100%;
+}
 .el-aside {
   color: #333;
 }

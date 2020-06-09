@@ -44,21 +44,45 @@ module.exports = {
   addFunc: async (ctx, next) => {
     let obj = ctx.req.body
     let bookSesson = await backUserModel.saveBookSesson(obj ? obj : '', 'file')
-    ctx.body = bookSesson
+    if (bookSesson) {
+      ctx.body = {
+        code: '001',
+        data: bookSesson
+      }
+    } else {
+      ctx.body = {
+        code: '002',
+        msg: '书籍信息插入失败！'
+      }
+    }
   },
   addBookParams: async (ctx, next) => {
-    let reqData = await getReqDatae(ctx)
+    let reqData = ctx.request.body
+    console.log(reqData, 'fgdfgt')
+
     let bookSesson = await backUserModel.saveBookSesson(reqData, 'unfile')
-    console.log(bookSesson)
+    if (bookSesson) {
+      ctx.body = {
+        code: '001',
+        data: bookSesson
+      }
+    } else {
+      ctx.body = {
+        code: '002',
+        msg: '书籍信息插入失败！'
+      }
+    }
   },
-  // 获取书籍的分类信息 参数 type 1 男频 2 女频 3不限 classification 分类信息
+  // 新增书籍分类 参数 type 1 男频 2 女频 3不限 classification 分类信息
   ClassificationSet: async (ctx, next) => {
-    let reqData = await getReqDatae(ctx)
+    let reqData = ctx.request.body
     let backSes = await backUserModel.setClassification(reqData)
+
     if (backSes.affectedRows === 1) {
       ctx.body = {
         msg: '新增成功',
-        code: '001'
+        code: '001',
+        data: await backUserModel.selectClassioficationByType(reqData.gender_type)
       }
     } else {
       ctx.body = {
@@ -78,16 +102,9 @@ module.exports = {
       return
     }
     let backSes = await backUserModel.selectClassioficationByType(gender_type)
-    if (backSes.length) {
-      ctx.body = {
-        data: backSes,
-        code: '001'
-      }
-    } else {
-      ctx.body = {
-        msg: '服务器异常！',
-        code: '002'
-      }
+    ctx.body = {
+      data: backSes,
+      code: '001'
     }
   },
   // 更新书籍分类信息
@@ -108,7 +125,8 @@ module.exports = {
   },
   // 删除分类信息
   delClassification: async (ctx, next) => {
-    let reqData = await getReqDatae(ctx)
+    let reqData = ctx.request.query
+
     if (reqData.id) {
       let backMsg = await backUserModel.delClassification(reqData.id)
       if (backMsg.affectedRows === 1) {

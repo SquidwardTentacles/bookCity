@@ -115,10 +115,9 @@ export default {
     // 文本文件change
     uploadFileChange (e) {
       const file = this.$refs[this.fileAdd].files[0]
-      console.log(file)
-
       if (file && this.accept.indexOf('image') === -1) {
         this.fileSesson = file
+        this.$emit('fileName', this.fileSesson.name)
       }
       this.previewPic(file, fileBack => {
         this.imgurl.txtUrl = fileBack
@@ -134,8 +133,6 @@ export default {
       }
       var formData = new FormData()
       formData.append('file', file)
-      // if (that.insertId) {
-      console.log(that.insertId)
       const setid = this.updateId ? this.updateId : this.insertId
       formData.append('insertId', setid)
       // }
@@ -145,9 +142,12 @@ export default {
       xhr.onload = function () {
         if (xhr.responseText) {
           const backData = JSON.parse(xhr.responseText)
-          that.insertId = backData.insertId
-          // 将insertid传给父页面
-          that.$emit('insertIdC', backData.insertId)
+          if (backData.code === '001') {
+            that.$message.success('书籍信息添加完成！')
+            that.insertId = backData.data.insertId
+            // 将insertid传给父页面
+            that.$emit('insertIdC', that.insertId)
+          }
         }
       }
     }

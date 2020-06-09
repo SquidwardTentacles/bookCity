@@ -9,17 +9,29 @@ async function uploadFilefunc (args, surface, back, type) {
   let keyArr = ''
   let valueArr = ''
 
+  // 将一些需要number格式的字段进行格式转换
+  args.gender_type ? args.gender_type = parseInt(args.gender_type) : ''
+  args.classification ? args.classification = parseInt(args.classification) : ''
+  args.price ? args.price = parseInt(args.price) : ''
+  // 在进行操作数据之前先配置好需要的相关数据
+  let insertId = ''
+  if (args.insertId) {
+    insertId = args.insertId
+    delete args.insertId
+  }
   if (type === 'file') {
-    keyArr = fileSesson.fileType
-    valueArr = fileSesson.fileName
+    keyArr = [fileSesson.fileType]
+    valueArr = [insertId ? fileSesson.fileName : '\'' + fileSesson.fileName + '\'']
   } else {
+    console.log(args, 'as')
     keyArr = Object.keys(args)
     valueArr = Object.values(args)
   }
-  console.log(typeof valueArr[0], 'valueArr')
-  if (valueArr.length) {
+
+  // 将相关字段添加引号后进入sql语句
+  if (keyArr.length > 1) {
+    console.log(valueArr, 'sr')
     for (let i = 0; i < valueArr.length; i++) {
-      // const element = array[i];
       if (typeof valueArr[i] === 'string') {
         valueArr[i] = '\'' + valueArr[i] + '\''
       }
@@ -27,13 +39,20 @@ async function uploadFilefunc (args, surface, back, type) {
   }
   // 如果有insertid就是新增内容 否则就是新插入数据
   let operationType = ''
-  if (args && args.insertId) {
-    sql = `update ${surface} set ${keyArr} = '${valueArr}' where id = ${args.insertId}`
+  if (insertId) {
+    let updateStr = ''
+    if (keyArr.length > 1) {
+      for (let i = 0; i < keyArr.length; i++) {
+        updateStr += `${keyArr[i]}=${valueArr[i]},`
+      }
+      updateStr = updateStr.slice(0, updateStr.length - 1)
+    } else {
+      updateStr = `${keyArr} = '${valueArr}'`
+    }
+    sql = `update ${surface} set ${updateStr} where id = ${insertId}`
     operationType = 'u'
   } else {
     operationType = 'i'
-    // console.log(typeof valueArr[0])
-    // return
     sql = `insert into ${surface}(${keyArr}) values(${valueArr})`
   }
   console.log(operationType, 'operationType')
@@ -41,9 +60,8 @@ async function uploadFilefunc (args, surface, back, type) {
 
   // 将操作结果返回
   let backd = await db.q(sql, [])
-  let backobj = {}
-  if (backd.affectedRows === 1) {
-    backobj.insertId = backd.insertId
+  if (operationType === 'u') {
+    backd.insertId = insertId
   }
   back(backd)
 }
