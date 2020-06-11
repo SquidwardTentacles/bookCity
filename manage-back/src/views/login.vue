@@ -25,6 +25,8 @@
         <el-button @click="register('ruleForm')">注册</el-button>
       </el-form-item>
     </el-form>
+    <input type="text"
+           v-focus>
   </div>
 </template>
 <script>
@@ -59,6 +61,18 @@ export default {
       }
     }
   },
+  directives: {
+    focus: {
+      // 指令的定义
+      inserted: function (el) {
+        el.focus()
+        console.log(el, 'el')
+      },
+      bind: function (el) {
+        console.log(el, 'bindel')
+      }
+    }
+  },
   methods: {
     submitForm (formName) {
       console.log(this.allowRequest)
@@ -70,8 +84,6 @@ export default {
       this.$refs[formName].validate(valid => {
         if (valid) {
           this.allowRequest = false
-          console.log('change')
-
           this.axios
             .post('/api/back/login', {
               account: this.ruleForm.account,
@@ -81,6 +93,8 @@ export default {
               this.allowRequest = true
               if (res.code === '001') {
                 this.$message.success(res.msg)
+
+                this.$store.commit('changeUserSesson', this.ruleForm)
                 this.$router.push({
                   path: '/home/index'
                 })

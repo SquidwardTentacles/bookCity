@@ -89,7 +89,7 @@ export default {
       'changeActionType'
     ]),
     getData (type) {
-      this.axios.get(`/api/book-classification-get?gender_type=${this.value}`).then(res => {
+      this.axios.get(`/api/back/book-classification-get?gender_type=${this.value}`).then(res => {
         if (res.code === '001') {
           this.backData = []
           this.backData = res.data
@@ -110,7 +110,7 @@ export default {
         gender_type: this.value,
         classification: this.bookClassification
       }
-      this.axios.post('/api/book-classification-set', params).then(res => {
+      this.axios.post('/api/back/book-classification-set', params).then(res => {
         this.bookClassification = ''
         this.changeActionType(this.value)
         this.$message.success('分类添加成功')
@@ -130,7 +130,7 @@ export default {
           classification: this.classificationEdit,
           id: id
         }
-        this.axios.put('/api/book-classificationupdate', params).then(res => {
+        this.axios.put('/api/back/book-classificationupdate', params).then(res => {
           if (res.code === '001') {
             this.$message.success(res.msg)
             // 传参更改按钮显示
@@ -152,7 +152,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.axios.delete(`/api/book-delclassification?id=${obj.id}`).then(res => {
+        this.axios.delete(`/api/back/book-delclassification?id=${obj.id}`).then(res => {
           if (res.code === '001') {
             this.$message.success(res.msg)
             this.getData()

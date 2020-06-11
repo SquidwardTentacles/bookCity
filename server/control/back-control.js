@@ -8,8 +8,10 @@ module.exports = {
   login: async (ctx, next) => {
     console.log('login')
 
-    let reqData = await getReqDatae(ctx)
+    let reqData = ctx.request.body
     let res = await backUserModel.lookupUser(reqData)
+    console.log(res.length, 'l')
+
     if (res.length) {
       ctx.body = { code: '001', msg: '登录成功' }
       ctx.session.user = res[0]
@@ -19,7 +21,7 @@ module.exports = {
     }
   },
   register: async (ctx, next) => {
-    let params = await getReqDatae(ctx)
+    let params = ctx.request.body
     if (!params || !params.account) {
       ctx.body = { code: '002', msg: '请填写用户名、密码' }
       return
@@ -111,7 +113,7 @@ module.exports = {
   },
   // 更新书籍分类信息
   classificationupdate: async (ctx, next) => {
-    let reqData = await getReqDatae(ctx)
+    let reqData = ctx.request.body
     let backMes = await backUserModel.updateClassification(reqData)
     if (backMes.affectedRows === 1) {
       ctx.body = {

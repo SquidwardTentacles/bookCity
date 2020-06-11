@@ -1,5 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import store from '../store'
+import { Message } from 'element-ui'
 
 Vue.use(VueRouter)
 
@@ -37,6 +39,23 @@ const routes = [
 
 const router = new VueRouter({
   routes
+})
+
+// 路由守卫
+router.beforeEach((to, from, next) => {
+  const userSesson = store.state.userSesson
+  if (to.path !== '/') {
+    if (!userSesson.account) {
+      Message.error('请登录后进行操作')
+      next({
+        path: '/'
+      })
+    } else {
+      next()
+    }
+  } else {
+    next()
+  }
 })
 
 export default router
