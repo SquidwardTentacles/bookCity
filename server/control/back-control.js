@@ -6,6 +6,8 @@ const app = new Koa()
 const getReqDatae = require('../js/getReqData')
 module.exports = {
   login: async (ctx, next) => {
+    console.log('login')
+
     let reqData = await getReqDatae(ctx)
     let res = await backUserModel.lookupUser(reqData)
     if (res.length) {
@@ -147,5 +149,6 @@ module.exports = {
       }
     }
 
-  }
+  },
+
 }

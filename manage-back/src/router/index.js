@@ -11,8 +11,8 @@ const routes = [
     children: [
       {
         path: '/home/index',
-        name: '添加书籍',
-        component: () => import(/* webpackChunkName: "about" */ '../views/sub-view/index.vue')
+        name: '书籍列表',
+        component: () => import(/* webpackChunkName: "about" */ '../views/sub-view/bookshelf.vue')
       },
       {
         path: '/home/classification',

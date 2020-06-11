@@ -54,14 +54,14 @@
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	font-size: 30rpx;
+	font-size: 36upx;
 	.icon {
 		margin-left: 10px;
-		width: 30rpx;
-		height: 30rpx;
+		width: 30upx;
+		height: 30upx;
 	}
 	.null-content {
-		width:100rpx ;
+		width:100upx ;
 	}
 }
 </style>

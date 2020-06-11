@@ -37,8 +37,8 @@ var storage = multer.diskStorage({
 //加载配置  
 var upload = multer({ storage: storage })
 
-router.post('/back/login', backControl.login)
-  .post('/back/register', backControl.register)
+router.post('/api/back/login', backControl.login)
+  .post('/api/back/register', backControl.register)
   /**
    * 上传文件
    {
@@ -58,19 +58,19 @@ router.post('/back/login', backControl.login)
        describe: ''
       }
       */
-  .post('/back/book-add', upload.single('file'), backControl.addFunc)
-  .post('/back/book-addparams', backControl.addBookParams)
+  .post('/api/back/book-add', upload.single('file'), backControl.addFunc)
+  .post('/api/back/book-addparams', backControl.addBookParams)
   /**
    * 书籍分类列表的新增
    * gender_type:1/2/3,
    * classification:书籍分类信息
   */
-  .post('/back/book-classification-set', backControl.ClassificationSet)
+  .post('/api/back/book-classification-set', backControl.ClassificationSet)
   /**
    * 获取书籍分类列表
    * gender_type:1/2/3
   */
-  .get('/back/book-classification-get', backControl.ClassioficationGet)
+  .get('/api/back/book-classification-get', backControl.ClassioficationGet)
   /**
    * 更改书籍分类信息 
    * updateMsg:更新后的内容，

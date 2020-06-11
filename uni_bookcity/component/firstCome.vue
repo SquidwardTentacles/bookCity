@@ -53,7 +53,7 @@ console.log(httpUrl)
 .title view {
   color: #000;
   font-weight: bold;
-  font-size: 46rpx;
+  font-size: 46upx;
 }
 .title text {
   color: #999;
@@ -64,11 +64,11 @@ console.log(httpUrl)
   text-align: center;
 }
 .img-box image {
-  width: 350rpx;
-  height: 350rpx;
+  width: 350upx;
+  height: 350upx;
 }
 .img-box {
-  font-size: 30rpx;
+  font-size: 30upx;
 }
 .img-box text {
   display: inline-block;

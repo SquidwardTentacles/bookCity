@@ -52,6 +52,7 @@ export default {
         account: '',
         password: ''
       },
+      allowRequest: true,
       rules: {
         account: [{ validator: validatePass, trigger: 'blur' }],
         password: [{ validator: validatePass2, trigger: 'blur' }]
@@ -60,14 +61,24 @@ export default {
   },
   methods: {
     submitForm (formName) {
+      console.log(this.allowRequest)
+
+      if (!this.allowRequest) {
+        this.$message.error('限制连续请求')
+        return
+      }
       this.$refs[formName].validate(valid => {
         if (valid) {
+          this.allowRequest = false
+          console.log('change')
+
           this.axios
-            .post('/api/login', {
+            .post('/api/back/login', {
               account: this.ruleForm.account,
               password: this.ruleForm.password
             })
             .then(res => {
+              this.allowRequest = true
               if (res.code === '001') {
                 this.$message.success(res.msg)
                 this.$router.push({
@@ -78,6 +89,7 @@ export default {
               }
             })
             .catch(err => {
+              this.allowRequest = true
               this.$message.error('请求失败！')
               console.log(err, 'err')
             })
